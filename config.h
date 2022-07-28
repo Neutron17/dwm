@@ -16,7 +16,7 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 // current tag & curent window font color
 static const char col_gray4[]       = "#ffffff";//"#eeeeee";
-// top bar 2nd color and active window border color
+// top bar second color and active window border color
 static const char col_cyan[]        = "#ffae00";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -26,7 +26,7 @@ static const char *colors[][3]      = {
 
 /* tagging */
 static const char *tags[] = { "", "", "", "", "", "", "", "", "", "" };
-static const char *defaulttagapps[] = { "st", "firefox", "", "", "", "", "", "", "", "" };
+static const char *defaulttagapps[] = { "st", "firefox", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -72,7 +72,6 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_s,      spawndefault,   {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -106,6 +105,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY,			XK_n,		shiftview, {.i = +1} },
 	{ MODKEY,			XK_n,		shiftview, {.i = -1} },
+	{ MODKEY,			XK_s,		spawndefault, {0} },
 	/*{ MODKEY|ControlMask|ShiftMask,	XK_h,		togglehorizontalmax,	NULL },
 	{ MODKEY|ControlMask|ShiftMask,	XK_l,		togglehorizontalmax,	NULL },
 	{ MODKEY|ControlMask|ShiftMask,	XK_j,		toggleverticalmax,	NULL },
