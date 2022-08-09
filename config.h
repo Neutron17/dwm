@@ -5,8 +5,10 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10", "fontawesome:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+#define ICONSIZE 16   /* icon size */
+#define ICONSPACING 5 /* space between icon and title */
+static const char *fonts[]          = { "monospace:size=12", "fontawesome:size=10" };
+static const char dmenufont[]       = "monospace:size=12";
 
 // background color
 static const char col_gray1[]       = "#222222";
@@ -15,9 +17,9 @@ static const char col_gray2[]       = "#444444";
 // font color
 static const char col_gray3[]       = "#bbbbbb";
 // current tag & curent window font color
-static const char col_gray4[]       = "#ffffff";//"#eeeeee";
-// top bar second color and active window border color
-static const char col_cyan[]        = "#ffae00";
+static const char col_gray4[]       = "#000000";//"#ffa700";
+// bar second color and active window border color
+static const char col_cyan[]        = "#ffa700";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -25,17 +27,17 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "", "", "", "", "", "", "" };
-static const char *defaulttagapps[] = { "st", "firefox", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+static const char *tags[] = { "" , "", "", "", "", "", "", "", "", "" };
+static const char *defaulttagapps[] = { "st", "firefox", "firefox", "thunar", NULL, NULL, NULL, NULL, NULL, NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class      instance    title       tags mask     isfloating, CenterThisWindow   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,     0,      -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,     1,      -1 },
 };
 
 /* layout(s) */
@@ -53,6 +55,7 @@ static const Layout layouts[] = {
 
 /* key definitions */
 #define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -66,6 +69,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *shutdowncmd[] = { "prompt", "\"Are you sure to shut down?\"", "\"sudo poweroff -h now\"", NULL };
 
 #include "shiftview.c"
 static Key keys[] = {
@@ -103,6 +107,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,	   spawn,	  {.v=shutdowncmd} },
 	{ MODKEY,			XK_n,		shiftview, {.i = +1} },
 	{ MODKEY,			XK_n,		shiftview, {.i = -1} },
 	{ MODKEY,			XK_s,		spawndefault, {0} },
