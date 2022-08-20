@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -7,7 +9,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 #define ICONSIZE 16   /* icon size */
 #define ICONSPACING 5 /* space between icon and title */
-static const char *fonts[]          = { "monospace:size=12", "fontawesome:size=10" };
+static const char *fonts[]          = { "monospace:size=12"/*, "fontawesome:size=10"*/ };
 static const char dmenufont[]       = "monospace:size=12";
 
 // background color
@@ -27,8 +29,18 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "" , "", "", "", "", "", "", "", "", "" };
-static const char *defaulttagapps[] = { "st", "firefox", "firefox", "thunar", NULL, NULL, NULL, NULL, NULL, NULL };
+static const char *tags[9] = { "1","2","3","4","5","6","7","8","9" };
+//static const char *tags[] = { "" , "", "", "", "", "", "", "", "", "" };
+static const char *defaulttagapps[9] = { "st", "firefox", "firefox", "thunar", NULL, NULL, NULL, NULL, NULL };
+
+/*
+static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
+static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
+static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
+*/
+static const char *upvol[]	= { "/usr/bin/amixer", "set", "Master", "5%+", NULL };
+static const char *downvol[]	= { "/usr/bin/amixer", "set", "Master", "5%-", NULL };
+static const char *mutevol[]	= { "/usr/bin/amixer", "set", "Master", "toggle", NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -36,7 +48,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating, CenterThisWindow   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,     0,      -1 },
+	{ "Gimp",     NULL,       NULL,       0,            0,     1,      -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,     1,      -1 },
 };
 
@@ -46,15 +58,19 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
+#include "fibonacci.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "[@]",      spiral },
+	{ "[\\]",      dwindle },
+	{ "|M|",      centeredmaster },
+	{ ">M>",      centeredfloatingmaster },
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
@@ -63,7 +79,7 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
@@ -87,14 +103,19 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_w,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ShiftMask,             XK_r,      setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                       XK_e,      setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                       XK_z,      setlayout,      {.v = &layouts[6]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0)
@@ -111,6 +132,16 @@ static Key keys[] = {
 	{ MODKEY,			XK_n,		shiftview, {.i = +1} },
 	{ MODKEY,			XK_n,		shiftview, {.i = -1} },
 	{ MODKEY,			XK_s,		spawndefault, {0} },
+
+	{ 0,                       XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
+	{ 0,                       XF86XK_AudioMute, spawn, {.v = mutevol } },
+	{ 0,                       XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
+	{ MODKEY,                       XK_F11, spawn, {.v = downvol } },
+	{ MODKEY,                       XK_F9,  spawn, {.v = mutevol } },
+	{ MODKEY,                       XK_F12, spawn, {.v = upvol   } },
+//	{ 0,				XF86XK_MonBrightnessUp,		spawn,	{.v = light_up} },
+//	{ 0,				XF86XK_MonBrightnessDown,	spawn,	{.v = light_down} },
+
 	/*{ MODKEY|ControlMask|ShiftMask,	XK_h,		togglehorizontalmax,	NULL },
 	{ MODKEY|ControlMask|ShiftMask,	XK_l,		togglehorizontalmax,	NULL },
 	{ MODKEY|ControlMask|ShiftMask,	XK_j,		toggleverticalmax,	NULL },
