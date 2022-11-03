@@ -2,6 +2,8 @@
 
 #include <X11/XF86keysym.h>
 
+#define SESSION_FILE "~/.dwm-session"
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -128,6 +130,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,	   spawn,	  {.v=shutdowncmd} },
 	{ MODKEY,			XK_n,		shiftview, {.i = +1} },
 	{ MODKEY,			XK_n,		shiftview, {.i = -1} },

@@ -1,5 +1,29 @@
---- dwm.c
-+++ dwm.c
+From 9fd4a02b57aa8a764d8105d5f2f854372f4ef559 Mon Sep 17 00:00:00 2001
+From: ViliamKovac1223 <viliamkovac1223@gmail.com>
+Date: Sat, 9 Jul 2022 17:35:54 +0200
+Subject: [PATCH] add restore patch
+
+---
+ config.def.h |  2 ++
+ dwm.c        | 53 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+
+diff --git a/config.def.h b/config.def.h
+index 6ec4146..0b91976 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -1,5 +1,7 @@
+ /* See LICENSE file for copyright and license details. */
+ 
++#define SESSION_FILE "/tmp/dwm-session"
++
+ /* appearance */
+ static const unsigned int borderpx  = 1;        /* border pixel of windows */
+ static const unsigned int snap      = 32;       /* snap pixel */
+diff --git a/dwm.c b/dwm.c
+index 74cec7e..76b40a2 100644
+--- a/dwm.c
++++ b/dwm.c
 @@ -1255,11 +1255,63 @@ propertynotify(XEvent *e)
  	}
  }
@@ -64,3 +88,14 @@
  }
  
  Monitor *
+@@ -2173,6 +2225,7 @@ main(int argc, char *argv[])
+ 		die("pledge");
+ #endif /* __OpenBSD__ */
+ 	scan();
++	restoreSession();
+ 	run();
+ 	if(restart) execvp(argv[0], argv);
+ 	cleanup();
+-- 
+2.35.1
+
