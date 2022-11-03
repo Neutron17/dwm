@@ -4,6 +4,14 @@
 
 #define SESSION_FILE "~/.dwm-session"
 
+/* alt-tab configuration */
+static const unsigned int tabModKey 		= 0x40;	/* if this key is hold the alt-tab functionality stays acitve. This key must be the same as key that is used to active functin altTabStart `*/
+static const unsigned int tabCycleKey 		= 0x17;	/* if this key is hit the alt-tab program moves one position forward in clients stack. This key must be the same as key that is used to active functin altTabStart */
+static const unsigned int tabPosY 			= 1;	/* tab position on Y axis, 0 = bottom, 1 = center, 2 = top */
+static const unsigned int tabPosX 			= 1;	/* tab position on X axis, 0 = left, 1 = center, 2 = right */
+static const unsigned int maxWTab 			= 600;	/* tab menu width */
+static const unsigned int maxHTab 			= 200;	/* tab menu height */
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -120,6 +128,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ Mod1Mask,             		XK_Tab,    altTabStart,	   {0} },
+
+	{ MODKEY|ShiftMask,			XK_n,	spawn,		SHCMD("setxkbmap us && xdotool type $(grep -v '^#' ~/.local/share/snippets | dmenu -i -l 50 | cut -d' ' -f1) && setxkbmap hu") },
+	{ MODKEY|ShiftMask,		XK_b,	    spawn,	  	{.v=(const char *[]){ "bookmark", NULL } } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
