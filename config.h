@@ -131,6 +131,9 @@ static Key keys[] = {
 	{ Mod1Mask,             		XK_Tab,    altTabStart,	   {0} },
 
 	{ MODKEY|ShiftMask,			XK_n,	spawn,		SHCMD("setxkbmap us && xdotool type $(grep -v '^#' ~/.local/share/snippets | dmenu -i -l 50 | cut -d' ' -f1) && setxkbmap hu") },
+	{ ControlMask,			XK_1,	spawn,		SHCMD("setxkbmap hu") },
+	{ ControlMask,			XK_2,	spawn,		SHCMD("setxkbmap gr") },
+
 	{ MODKEY|ShiftMask,		XK_b,	    spawn,	  	{.v=(const char *[]){ "bookmark", NULL } } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
