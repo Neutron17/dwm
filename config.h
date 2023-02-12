@@ -130,9 +130,11 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ Mod1Mask,             		XK_Tab,    altTabStart,	   {0} },
 
-	{ MODKEY|ShiftMask,			XK_n,	spawn,		SHCMD("setxkbmap us && xdotool type $(grep -v '^#' ~/.local/share/snippets | dmenu -i -l 50 | cut -d' ' -f1) && setxkbmap hu") },
+	{ MODKEY|ShiftMask,		XK_n,	spawn,		SHCMD("setxkbmap us && xdotool type $(grep -v '^#' ~/.local/share/snippets | dmenu -i -l 50 | cut -d' ' -f1) && setxkbmap hu") },
 	{ ControlMask,			XK_1,	spawn,		SHCMD("setxkbmap hu") },
 	{ ControlMask,			XK_2,	spawn,		SHCMD("setxkbmap gr") },
+	{ ControlMask,			XK_3,	spawn,		SHCMD("setxkbmap en") },
+	{ ControlMask,			XK_3,	spawn,		SHCMD("setxkbmap de") },
 
 	{ MODKEY|ShiftMask,		XK_b,	    spawn,	  	{.v=(const char *[]){ "bookmark", NULL } } },
 	TAGKEYS(                        XK_1,                      0)
@@ -145,7 +147,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },
+	{ MODKEY|ControlMask, 		XK_q,      quit,           {1} },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,	   spawn,	  {.v=shutdowncmd} },
 	{ MODKEY,			XK_n,		shiftview, {.i = +1} },
 	{ MODKEY,			XK_n,		shiftview, {.i = -1} },
@@ -157,6 +159,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_F11, spawn, {.v = downvol } },
 	{ MODKEY,                       XK_F9,  spawn, {.v = mutevol } },
 	{ MODKEY,                       XK_F12, spawn, {.v = upvol   } },
+	{ MODKEY,			XK_F1,		spawn,		{.v = (const char*[]){ "mounter", NULL } } },
+	{ MODKEY,			XK_F2,		spawn,		{.v = (const char*[]){ "unmounter", NULL } } },
 //	{ 0,				XF86XK_MonBrightnessUp,		spawn,	{.v = light_up} },
 //	{ 0,				XF86XK_MonBrightnessDown,	spawn,	{.v = light_down} },
 
