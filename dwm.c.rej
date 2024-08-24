@@ -1,0 +1,12 @@
+--- dwm.c
++++ dwm.c
+@@ -242,6 +250,9 @@ static int xerror(Display *dpy, XErrorEvent *ee);
+ static int xerrordummy(Display *dpy, XErrorEvent *ee);
+ static int xerrorstart(Display *dpy, XErrorEvent *ee);
+ static void zoom(const Arg *arg);
++void drawTab(int nwins, int first, Monitor *m);
++void altTabStart(const Arg *arg);
++static void altTabEnd();
+ 
+ /* variables */
+ static const char broken[] = "broken";
