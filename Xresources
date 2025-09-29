@@ -1,0 +1,74 @@
+! Wallust X resources template
+! You can use this template by adding the following to wallust.toml:
+! xres = { src = "Xresources", dst = "~/.config/Xresources" }
+! And to apply it to your X enviroment, you do:
+! xrdb -merge -quiet ~/.config/Xresources
+
+*foreground:        #FEFBE3
+*background:        #261B1F
+*.foreground:       #FEFBE3
+*.background:       #261B1F
+emacs*foreground:   #FEFBE3
+emacs*background:   #261B1F
+URxvt*foreground:   #FEFBE3
+XTerm*foreground:   #FEFBE3
+UXTerm*foreground:  #FEFBE3
+! To determine the opacity you use [], (e.g. '[80]#FFFFFF')
+URxvt*background:   [100]#261B1F
+XTerm*background:   #261B1F
+UXTerm*background:  #261B1F
+URxvt*cursorColor:  #C28F87
+XTerm*cursorColor:  #C28F87
+UXTerm*cursorColor: #C28F87
+URxvt*borderColor:  [100]#261B1F
+
+! Colors 0-15.
+*.color0: #4E4246
+*color0:  #4E4246
+*.color1: #400523
+*color1:  #400523
+*.color2: #86242B
+*color2:  #86242B
+*.color3: #F35027
+*color3:  #F35027
+*.color4: #FC8A18
+*color4:  #FC8A18
+*.color5: #FCC024
+*color5:  #FCC024
+*.color6: #FCF3B0
+*color6:  #FCF3B0
+*.color7: #F5F1CF
+*color7:  #F5F1CF
+*.color8: #ABA891
+*color8:  #ABA891
+*.color9: #400523
+*color9:  #400523
+*.color10: #86242B
+*color10:  #86242B
+*.color11: #F35027
+*color11:  #F35027
+*.color12: #FC8A18
+*color12:  #FC8A18
+*.color13: #FCC024
+*color13:  #FCC024
+*.color14: #FCF3B0
+*color14:  #FCF3B0
+*.color15: #F5F1CF
+*color15:  #F5F1CF
+
+! Black color that will not be affected by bold highlighting.
+*.color66: #4E4246
+*color66:  #4E4246
+
+! Xclock colors.
+XClock*foreground: #FEFBE3
+XClock*background: #261B1F
+! rgba xres expects a HEXA color like `00/11/22/FF` there the last bit is the alpha in hex.
+XClock*majorColor:  rgba:f5/f1/cf/FF
+XClock*minorColor:  rgba:f5/f1/cf/FF
+XClock*hourColor:   rgba:f5/f1/cf/FF
+XClock*minuteColor: rgba:f5/f1/cf/FF
+XClock*secondColor: rgba:f5/f1/cf/FF
+
+! Set depth to make transparency work.
+URxvt*depth: 32
